@@ -6,14 +6,19 @@ LIBDIR   = $(BUILDDIR)/lib
 OBJDIR   = $(BUILDDIR)/obj
 LIBPATH  = $(LIBDIR)/libummapio.a
 CLIBS    = -lummapio
-CFLAGS   = -DDEBUG_PRINT=$(or $(DEBUG_PRINT),0) -O2 -I. -L$(LIBDIR)
+CFLAGS   = -DDEBUG_PRINT=$(or $(DEBUG_PRINT),0) -O2 -I. -L$(LIBDIR) -g
+CXXFLAGS = -DDEBUG_PRINT=$(or $(DEBUG_PRINT),0) -O2 -I. -L$(LIBDIR) -g
 
 ifeq (,$(findstring Cray,$(shell cc -V 2>&1)))
     CLIBS  += -pthread -lrt
     CFLAGS += -Wall -Wno-unused-label -Wno-unused-function -std=c99
+	CXXFLAGS += -Wall -Wno-unused-label -Wno-unused-function
 endif
 
-all: setup $(LIBPATH) $(BINDIR)/example.out
+all: setup $(LIBPATH) $(BINDIR)/example.out $(BINDIR)/bench.out
+
+$(BINDIR)/bench.out: $(LIBPATH) bench/main.cpp
+	$(CXX) $(CXXFLAGS) bench/main.cpp -o $(BINDIR)/bench.out $(CLIBS) -O0
 
 $(BINDIR)/example.out: $(LIBPATH) example/main.c
 	$(CC) $(CFLAGS) example/main.c -o $(BINDIR)/example.out $(CLIBS)
