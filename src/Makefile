@@ -18,7 +18,7 @@ endif
 all: setup $(LIBPATH) $(BINDIR)/example.out $(BINDIR)/bench.out
 
 $(BINDIR)/bench.out: $(LIBPATH) bench/main.cpp
-	$(CXX) $(CXXFLAGS) bench/main.cpp -o $(BINDIR)/bench.out $(CLIBS) -O0
+	$(CXX) $(CXXFLAGS) bench/main.cpp -o $(BINDIR)/bench.out $(CLIBS) -O0 -fopenmp
 
 $(BINDIR)/example.out: $(LIBPATH) example/main.c
 	$(CC) $(CFLAGS) example/main.c -o $(BINDIR)/example.out $(CLIBS)
